@@ -28,7 +28,6 @@ def auto_WSA():
                 PHONE_NUMBER, "Lỗi xảy ra khi lấy dữ liệu từ SQL"
             )
             return False
-        
 
         try:
             tool_status = excel_transition_and_run_macro(
@@ -116,8 +115,8 @@ if __name__ == "__main__":
     # while True:
     #     schedule.run_pending()
     #     sleep(1)
-    
-    browser.start_browser(CHROME_PROFILE_CDBR_PATH)
-    sleep(5000)
 
-    
+    # browser.start_browser(CHROME_PROFILE_CDBR_PATH)
+    # sleep(5000)
+
+    getDB_to_excel(DATA_GNOC_RAW_PATH)

@@ -22,9 +22,7 @@ def connect_to_db():
     """Hàm kết nối đến cơ sở dữ liệu MySQL."""
     pymysql.install_as_MySQLdb()
     try:
-        engine = create_engine(
-            "mysql+mysqldb://ttvhkt_kv3:Ttkv32024#!@10.61.18.197:9999/qlctkt"
-        )
+        engine = create_engine(MySQL_DB)
         connection = engine.connect()
         return connection
     except Exception as e:
@@ -45,4 +43,3 @@ def query_to_excel(connection, query, output_path):
     except Exception as e:
         print("Lỗi khi thực hiện truy vấn hoặc xuất file:")
         traceback.print_exc()
-

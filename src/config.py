@@ -47,7 +47,10 @@ with open(OPEN_VPN_CONFIG_PATH, "r") as file:
 
         if "pwd:" in line:
             OTP_SECRET = line.strip().replace("pwd:", "").strip()
-            print(OTP_SECRET)
+
+        if "SQL:" in line:
+            MySQL_DB = line.strip().replace("SQL:", "").strip()
+
         if "opvn_profile:" in line:
             OPEN_VPN_CONFIG_PATH = line.strip().replace("opvn_profile:", "").strip()
 
