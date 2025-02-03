@@ -84,7 +84,7 @@ def getDB_to_excel(excel_gnoc_path):
             # Xuất dữ liệu ra Excel
             query_to_excel(connection, query_pakh, excel_gnoc_path)
             print("Lấy file database thành công!")
-            return
+            return True
 
         except FileNotFoundError as fe:
             print(f"Lỗi file: {fe}")
@@ -92,6 +92,7 @@ def getDB_to_excel(excel_gnoc_path):
             print(f"Lỗi kết nối: {ce}")
         except Exception as e:
             print(f"Lỗi không xác định: {e}")
+            
         finally:
             # Đảm bảo đóng kết nối database
             if "connection" in locals() and connection:
@@ -108,6 +109,7 @@ def getDB_to_excel(excel_gnoc_path):
         sleep(5)
 
     print("Không thể hoàn thành tác vụ sau nhiều lần thử.")
+    return False
 
 
 def delete_data_folder(folder_path):
