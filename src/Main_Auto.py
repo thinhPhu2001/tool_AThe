@@ -105,18 +105,19 @@ def auto_WSA_mail():
 
 if __name__ == "__main__":
 
-    # schedule.every().day.at("08:00").do(auto_WSA_mail)
-    # schedule.every().day.at("13:30").do(auto_WSA_nofi)
+    schedule.every().day.at("08:00").do(auto_WSA_mail)
+    schedule.every().day.at("13:30").do(auto_WSA_nofi)
 
-    # print("========================")
-    # print("Chờ đến TÁC VỤ tiếp theo")
-    # print("========================")
+    print("========================")
+    print("Chờ đến TÁC VỤ tiếp theo")
+    print("========================")
 
-    # while True:
-    #     schedule.run_pending()
-    #     sleep(1)
+    while True:
+        schedule.run_pending()
+        sleep(1)
 
     # browser.start_browser(CHROME_PROFILE_CDBR_PATH)
     # sleep(5000)
 
-    getDB_to_excel(DATA_GNOC_RAW_PATH)
+    # getDB_to_excel(DATA_GNOC_RAW_PATH)
+    # send_message()

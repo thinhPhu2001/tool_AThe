@@ -92,7 +92,7 @@ def getDB_to_excel(excel_gnoc_path):
             print(f"Lỗi kết nối: {ce}")
         except Exception as e:
             print(f"Lỗi không xác định: {e}")
-            
+
         finally:
             # Đảm bảo đóng kết nối database
             if "connection" in locals() and connection:
@@ -166,15 +166,15 @@ def excel_transition_and_run_macro(
         try:
             if not excel_tool_manager.run_macro("Module1.pic_cum_huyen_loop"):
                 return False
-            
+
             if not excel_tool_manager.run_macro("Module1.pic_TH_tinh"):
                 return False
-            
+
             if not excel_tool_manager.run_macro("Module1.pic_tienPhat"):
                 return False
-            
+
             excel_tool_manager.run_macro("Module2.Xuatdataguitinh")
-               
+
             excel_tool_manager.save_file()
             excel_tool_manager.close_all_file()
             return True
@@ -195,6 +195,8 @@ def excel_transition_and_run_macro(
 def send_message():
     browser.start_browser(CHROME_PROFILE_CDBR_PATH)
     whatsapp.driver = browser.driver
+    # xác định ngày hiện tại
+    date_time = datetime.now().strftime("%d/%m/%Y")
 
     try:
         df = pd.read_excel(DATA_CONFIG_PATH, sheet_name="Sheet2", header=0)
@@ -223,16 +225,41 @@ def send_message():
             while retries < max_retries:
                 if temp:
                     try:
-                        send_mess_status = whatsapp.send_attached_img_message(
-                            message, img_path, tag_name=None
-                        )
-                        sleep(5)
-                        if send_mess_status:
-                            print(f"Gửi tin nhắn đén nhóm [{img_name}] thành công")
-                            sleep(5)
-                            break
+                        df1 = pd.read_excel(EXCEL_TOOL_PATH, "TH", header=3)
+                        df1_limited = df1.iloc[1:19]
+
+                        for index1, row1 in df1_limited.iterrows():
+                            sum_ton = row1["Sum tồn"]
+                            tinh_name = row1["MÃ Tỉnh"]
+
+                            if tinh_name == img_name:
+                                if sum_ton != 0:
+                                    send_mess_status = (
+                                        whatsapp.send_attached_img_message(
+                                            message, img_path, tag_name=None
+                                        )
+                                    )
+                                    sleep(5)
+
+                                    if send_mess_status:
+                                        print(
+                                            f"Gửi tin nhắn đén nhóm [{img_name}] thành công"
+                                        )
+                                        sleep(5)
+                                        break
+
+                                elif sum_ton == 0:
+                                    print(f"{img_name} không có wo tồn")
+                                    whatsapp.send_message(
+                                        f"Không có WO tồn: {date_time}"
+                                    )
+                                    break
+
+                        break
+
                     except Exception as e:
                         print(f"Lỗi khi gửi tin nhắn đến nhóm [{img_name}]: {e}")
+                        break
 
                 else:
                     retries += 1
@@ -300,7 +327,11 @@ def send_email():
     # Kết hợp các email từ cột "GD" và "CD"
     CC_list = "; ".join(cc_gd_list + cc_cd_list)
 
-    bonus = ["thepv1@viettel.com.vn", "nguyenbatung@viettel.com.vn", "quannt1@viettel.com.vn"]
+    bonus = [
+        "thepv1@viettel.com.vn",
+        "nguyenbatung@viettel.com.vn",
+        "quannt1@viettel.com.vn",
+    ]
     CC_list = "; ".join([CC_list] + bonus) if CC_list else "; ".join(bonus)
 
     # Cấu hình thông tin cơ bản
@@ -360,7 +391,9 @@ def send_email():
 
     # đính kèm file excel
     mail.Attachments.Add(str(EXCEL_GuiTinh_PATH))
-    mail.Attachments.Add(r"D:\A_The\data\doc\HUONG DAN NHANH XU LY PHAN ANH KHACH HANG Vo TUYEN CHO CNKT.docx")
+    mail.Attachments.Add(
+        r"D:\A_The\data\doc\HUONG DAN NHANH XU LY PHAN ANH KHACH HANG Vo TUYEN CHO CNKT.docx"
+    )
 
     try:
         # Gửi email
