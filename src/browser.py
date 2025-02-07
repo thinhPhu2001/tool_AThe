@@ -262,7 +262,7 @@ class WhatsAppBot(BrowserManager):
         message_box.click()
         message_box.send_keys(message)
         message_box.send_keys(Keys.ENTER)
-        sleep(1)
+        sleep(10)
 
     def send_attached_file(self, file_path):
         # gắn file đính kèm
@@ -334,7 +334,7 @@ class WhatsAppBot(BrowserManager):
             message_box.send_keys(remove_accents(tag_name))
             sleep(3)
             message_box.send_keys(Keys.TAB)
-            sleep(2)
+            sleep(5)
 
         # gắn file đính kèm
         WebDriverWait(self.driver, 20).until(
@@ -382,8 +382,8 @@ class WhatsAppBot(BrowserManager):
                         )
                         send_button.click()
                         print("gui thanh cong")
+                        sleep(10)
                         return True
-                        sleep(3)
                     except Exception as e:
                         print(e)
                         return False
@@ -490,7 +490,7 @@ class WhatsAppBot(BrowserManager):
                 )
             )
             send_button.click()
-            sleep(3)
+            sleep(5)
         except Exception as e:
             print(f"lỗi gửi tin nhắn báo lỗi cho bản thân: {e}")
 

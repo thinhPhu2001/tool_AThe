@@ -1,0 +1,6 @@
+phone: 0964741020
+pwd: GU3TCMZYGM2DAOJV
+SQL: mysql+mysqldb://ttvhkt_kv3:Ttkv32024#!@10.61.18.197:9999/qlctkt
+opvn_profile: D:\2-Job\Viettel\project_thu_viec\A_The\data\openvn\nguyenbatung.ovpn
+opvn_path: C:\Program Files\OpenVPN Connect\OpenVPNConnect.exe
+cdbr: C:\Users\AD\AppData\Local\Google\Chrome\User Data\Default

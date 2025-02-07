@@ -20,6 +20,10 @@ file_path = r"D:\2-Job\Viettel\project_thu_viec\Auto_tool_offical\data\excel\dat
 
 
 def auto_WSA():
+     # xác định ngày hiện tại
+    date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print(f"Bắt đầu chạy tiến trình vào ngày: {date_time}")
+
     try:
         if not getDB_to_excel(DATA_GNOC_RAW_PATH):
             browser.start_browser(CHROME_PROFILE_CDBR_PATH)
@@ -105,19 +109,28 @@ def auto_WSA_mail():
 
 if __name__ == "__main__":
 
-    schedule.every().day.at("08:00").do(auto_WSA_mail)
-    schedule.every().day.at("13:30").do(auto_WSA_nofi)
+    # schedule.every().day.at("07:00").do(auto_WSA_mail)
+    # schedule.every().day.at("13:30").do(auto_WSA_nofi)
 
-    print("========================")
-    print("Chờ đến TÁC VỤ tiếp theo")
-    print("========================")
+    # print("========================")
+    # print("Chờ đến TÁC VỤ tiếp theo")
+    # print("========================")
 
-    while True:
-        schedule.run_pending()
-        sleep(1)
+    # while True:
+    #     schedule.run_pending()
+    #     sleep(1)
+
+    # on_openvpn()
+    # sleep(5)
+    # off_openvpn()
 
     # browser.start_browser(CHROME_PROFILE_CDBR_PATH)
-    # sleep(5000)
+    # whatsapp.driver = browser.driver
+    # whatsapp.find_group_name("https://chat.whatsapp.com/CF0hrcSjAJu5dpBBRE2xCi")
+    # whatsapp.send_message("hello")
+    # sleep(10000)
 
     # getDB_to_excel(DATA_GNOC_RAW_PATH)
-    # send_message()
+    # send_message()    
+
+    # auto_WSA_mail()
