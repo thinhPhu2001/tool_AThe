@@ -234,18 +234,18 @@ def send_message():
 
                             if tinh_name == img_name:
                                 if sum_ton != 0:
-                                    send_mess_status = (
+                                    operation_mess_status = (
                                         whatsapp.send_attached_img_message(
                                             message, img_path, tag_name=None
                                         )
                                     )
                                     sleep(5)
 
-                                    if send_mess_status:
+                                    if operation_mess_status:
                                         print(
                                             f"Gửi tin nhắn đén nhóm [{img_name}] thành công"
                                         )
-                                        sleep(5)
+                                        print("")
                                         break
 
                                 elif sum_ton == 0:
@@ -253,6 +253,7 @@ def send_message():
                                     whatsapp.send_message(
                                         f"Không có WO tồn: {date_time}"
                                     )
+                                    print("")
                                     break
 
                         break

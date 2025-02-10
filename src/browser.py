@@ -7,6 +7,7 @@ from selenium.common.exceptions import TimeoutException
 from pywinauto.application import Application
 from time import sleep
 import os
+import re
 from pynput.keyboard import Controller, Key
 import pyperclip
 from bs4 import BeautifulSoup
@@ -262,7 +263,8 @@ class WhatsAppBot(BrowserManager):
         message_box.click()
         message_box.send_keys(message)
         message_box.send_keys(Keys.ENTER)
-        sleep(10)
+        print("Hoàn tất tiến trình soạn tin nhắn và nhấn nút gửi")
+        self.get_last_message_info()
 
     def send_attached_file(self, file_path):
         # gắn file đính kèm
@@ -278,7 +280,6 @@ class WhatsAppBot(BrowserManager):
             attached_button = self.driver.find_element(
                 By.XPATH, XPATHS_WHATSAPP["attached_button"]
             )
-            print("đã tìm thấy nút")
 
             attached_button.click()
             try:
@@ -297,7 +298,6 @@ class WhatsAppBot(BrowserManager):
                         file_path
                     )  # Chuyển đường dẫn thành tuyệt đối
                     file_input.send_keys(absolute_path)
-                    print("xong buoc lua hinh")
                     try:
                         # nút gửi tin nhắn
                         send_button = WebDriverWait(self.driver, 10).until(
@@ -309,8 +309,11 @@ class WhatsAppBot(BrowserManager):
                             )
                         )
                         send_button.click()
-                        print("gui thanh cong")
-                        sleep(5)
+                        print("Hoàn tất tiến trình soạn tin nhắn và nhấn nút gửi")
+                        send_message_status = self.get_last_message_info()
+                        if send_message_status:
+                            return True
+
                     except Exception as e:
                         print(e)
                 except Exception as e:
@@ -349,7 +352,6 @@ class WhatsAppBot(BrowserManager):
             attached_button = self.driver.find_element(
                 By.XPATH, XPATHS_WHATSAPP["attached_button"]
             )
-            print("đã tìm thấy nút")
 
             attached_button.click()
             try:
@@ -368,7 +370,6 @@ class WhatsAppBot(BrowserManager):
                         file_path
                     )  # Chuyển đường dẫn thành tuyệt đối
                     file_input.send_keys(absolute_path)
-                    print("xong buoc lua hinh")
 
                     try:
                         # nút gửi tin nhắn
@@ -381,9 +382,11 @@ class WhatsAppBot(BrowserManager):
                             )
                         )
                         send_button.click()
-                        print("gui thanh cong")
-                        sleep(10)
-                        return True
+                        print("Hoàn tất tiến trình soạn tin nhắn và nhấn nút gửi")
+                        send_message_status = self.get_last_message_info()
+                        if send_message_status:
+                            return True
+
                     except Exception as e:
                         print(e)
                         return False
@@ -414,7 +417,6 @@ class WhatsAppBot(BrowserManager):
             attached_button = self.driver.find_element(
                 By.XPATH, XPATHS_WHATSAPP["attached_button"]
             )
-            print("đã tìm thấy nút")
 
             attached_button.click()
             try:
@@ -433,44 +435,13 @@ class WhatsAppBot(BrowserManager):
                         file_path
                     )  # Chuyển đường dẫn thành tuyệt đối
                     file_input.send_keys(absolute_path)
-                    print("xong buoc lua hinh")
+
                 except Exception as e:
                     print(e)
             except Exception as e:
                 print(e)
         except Exception as e:
             print(e)
-
-    def send_message_CDBR(self, message):
-        try:
-            # tìm ô tin nhắn
-            message_box = WebDriverWait(self.driver, 10).until(
-                EC.presence_of_element_located(
-                    (By.XPATH, XPATHS_WHATSAPP["message_box"])
-                )
-            )
-            message_box.click()
-            message_box.send_keys(message)
-            message_box.send_keys()
-            message_box.send_keys(Keys.CONTROL, "v")
-            sleep(5)
-            try:
-                # nút gửi tin nhắn
-                send_button = WebDriverWait(self.driver, 10).until(
-                    EC.element_to_be_clickable(
-                        (
-                            By.XPATH,
-                            XPATHS_WHATSAPP["send_button"],
-                        )
-                    )
-                )
-                send_button.click()
-                print("gui thanh cong")
-                sleep(3)
-            except Exception as e:
-                print(e)
-        except Exception as e:
-            print(f"Không tìm thấy ô tin nhắn: {e}")
 
     def send_Error_Notification(self, phone_number, message):
         if not phone_number.startswith("+84"):
@@ -493,6 +464,70 @@ class WhatsAppBot(BrowserManager):
             sleep(5)
         except Exception as e:
             print(f"lỗi gửi tin nhắn báo lỗi cho bản thân: {e}")
+
+    def get_last_message_info(self):
+        """Hàm lấy thông tin tin nhắn mới nhất"""
+        try:
+            # # Tìm tin nhắn cuối cùng
+            # last_message = self.driver.find_element(
+            #     By.XPATH, '//*[@id="main"]/div[3]/div/div[2]/div[3]/div[last()]'
+            # )
+
+            # Lấy tin nhắn cuối cùng mà bạn đã gửi
+            messages = self.driver.find_elements(
+                By.CSS_SELECTOR, "div.message-out"
+            )  # Chỉ lấy tin nhắn do bạn gửi
+            last_message = messages[-1]  # Tin nhắn cuối cùng
+
+            # Lấy nội dung tin nhắn
+            # text = last_message.text
+            # print(f"nội dung tin nhắn: {text}")
+
+            # outer_html = last_message.get_attribute("outerHTML")
+            # match = re.search(r'data-id="([^"]+)"', outer_html)
+            # data_id = match.group(1) if match else None
+            # print(f"ma outer HTML: {outer_html}")
+            # # Kiểm tra xem tin nhắn có dấu tích xanh không
+            # try:
+            #     checkmark = last_message.find_element(
+            #         By.XPATH, ".//div/div/div[1]/div[1]/div[1]/div/div[2]/div/div/span"
+            #     )
+            #     if checkmark.get_attribute("data-icon") == "msg-dblcheck":
+            #         status = "✅ Đã gửi"
+            #     else:
+            #         status = "⏳ Chưa gửi"
+            # except:
+            #     status = "❓ Không biết"
+            # print(f"🆔 Data-ID: {data_id}")
+
+            while True:
+                try:
+                    # # Tìm lại tin nhắn dựa trên data-id
+                    # message = driver.find_element(By.CSS_SELECTOR, f'div[data-id="{data_id}"]')
+
+                    # Kiểm tra trạng thái tin nhắn
+                    if last_message.find_elements(
+                        By.CSS_SELECTOR, 'span[data-icon="msg-dblcheck"]'
+                    ):
+                        print("✅✅ Tin nhắn đã gửi đi và được nhận!")
+                        break
+
+                    elif last_message.find_elements(
+                        By.CSS_SELECTOR, 'span[data-icon="msg-check"]'
+                    ):
+                        print("✅ Tin nhắn đã gửi đi nhưng chưa được nhận.")
+                        break
+
+                except:
+                    pass
+
+                sleep(2)  # Kiểm tra lại sau 2 giây
+
+            return True
+
+        except Exception as e:
+            print("❌ Lỗi khi lấy thông tin tin nhắn:", e)
+            return False
 
 
 # Lớp ZaloBot

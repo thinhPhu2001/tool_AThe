@@ -7,7 +7,6 @@ from browser import *
 
 from Vo_tuyen import *
 
-
 from pynput.keyboard import Controller, Key
 import schedule
 import sys
@@ -20,7 +19,7 @@ file_path = r"D:\2-Job\Viettel\project_thu_viec\Auto_tool_offical\data\excel\dat
 
 
 def auto_WSA():
-     # xác định ngày hiện tại
+    # xác định ngày hiện tại
     date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
     print(f"Bắt đầu chạy tiến trình vào ngày: {date_time}")
 
@@ -131,6 +130,11 @@ if __name__ == "__main__":
     # sleep(10000)
 
     # getDB_to_excel(DATA_GNOC_RAW_PATH)
-    # send_message()    
+    # send_message()
 
     # auto_WSA_mail()
+    # on_openvpn()
+    # sleep(5)
+    # off_openvpn()
+
+    send_message()
